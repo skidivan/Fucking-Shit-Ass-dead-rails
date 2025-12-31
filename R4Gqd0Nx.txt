@@ -371,12 +371,19 @@ local function guestHookSound(sound)
     end)
 
     local destroyConn = sound.Destroying:Connect(function()
-        if playedConn.Connected then playedConn:Disconnect() end
-        if propConn.Connected then propConn:Disconnect() end
-        if destroyConn.Connected then destroyConn:Disconnect() end
-        guestSoundHooks[sound] = nil
-        guestSoundBlockedUntil[sound] = nil
-    end)
+    if playedConn and playedConn.Connected then
+        playedConn:Disconnect()
+    end
+
+    if propConn and propConn.Connected then
+        propConn:Disconnect()
+    end
+
+    -- destroyConn auto-cleans itself, DO NOT touch it here
+
+    guestSoundHooks[sound] = nil
+    guestSoundBlockedUntil[sound] = nil
+end)
 
     guestSoundHooks[sound] = {playedConn, propConn, destroyConn, id = preId}
 
@@ -603,4 +610,5 @@ InterfaceTab:Button({
     Callback = function()
         Window:Destroy()
     end
+
 })
