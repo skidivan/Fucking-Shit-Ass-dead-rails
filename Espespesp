@@ -1,0 +1,266 @@
+local a = game:GetService("Players")
+local b = game:GetService("RunService")
+local c = a.LocalPlayer
+
+local d = workspace:WaitForChild("Map")
+local e = d:WaitForChild("Ingame")
+local f = workspace.Players.Survivors
+local g = workspace.Players.Killers
+
+local h = {
+	Survivor = Color3.fromRGB(0,170,255),
+	Killer = Color3.fromRGB(204,0,0),
+	Generator = Color3.fromRGB(255,206,28),
+	Item = Color3.fromRGB(32,54,153),
+	GREEN = Color3.fromRGB(0,255,0),
+	RED = Color3.fromRGB(255,0,0),
+	CustomObj = Color3.fromRGB(0,255,0)
+}
+
+local i = {}
+local j = {}
+
+local k = {
+	Swords = "Entanglement",
+	Shockwave = "Mass Infection",
+	PizzaDeliveryRig = "C00lminions"
+}
+
+local function l()
+	local m = c.Character
+	return m and m:FindFirstChild("HumanoidRootPart")
+end
+
+local function n(o,p,q)
+	local r = Instance.new("BillboardGui")
+	r.Size = UDim2.new(6,0,1,0)
+	r.StudsOffset = Vector3.new(0,2,0)
+	r.Adornee = p
+	r.AlwaysOnTop = true
+	r.MaxDistance = math.huge
+	r.Parent = o
+
+	local s = Instance.new("TextLabel")
+	s.Size = UDim2.fromScale(1,1)
+	s.BackgroundTransparency = 1
+	s.Text = q
+	s.TextSize = 12
+	s.Font = Enum.Font.Arcade
+	s.TextWrapped = false
+	s.TextXAlignment = Enum.TextXAlignment.Center
+	s.TextYAlignment = Enum.TextYAlignment.Center
+	s.Parent = r
+
+	return r,s
+end
+
+local function t(u,v)
+	if i[u] then return end
+	i[u] = true
+
+	local w = u:WaitForChild("Humanoid",5)
+	local x = u:WaitForChild("Head",5)
+	if not w or not x then return end
+
+	local y = v and h.Killer or h.Survivor
+	local z,aa = n(u,x,u.Name)
+	aa.TextColor3 = y
+
+	local ab = Instance.new("Highlight")
+	ab.Adornee = u
+	ab.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	ab.FillColor = y
+	ab.OutlineColor = y
+	ab.FillTransparency = 0.9
+	ab.Parent = u
+
+	local ac
+	if not v then
+		w.HealthChanged:Connect(function(ad)
+			if ad <= 50 then
+				if not ac then
+					ac = b.Heartbeat:Connect(function()
+						local ae = tick() % 2
+						if ae < 1 then
+							aa.TextColor3 = h.RED
+						else
+							aa.TextColor3 = y
+						end
+					end)
+				end
+			else
+				if ac then ac:Disconnect() ac=nil end
+				aa.TextColor3 = y
+			end
+		end)
+	end
+
+	w.Died:Once(function()
+		if ac then ac:Disconnect() end
+		z:Destroy()
+		ab:Destroy()
+		i[u] = nil
+	end)
+end
+
+local function af(ag)
+	if i[ag] then return end
+	i[ag] = true
+
+	local ah = ag:WaitForChild("Main",5)
+	local ai = ag:WaitForChild("Progress",5)
+	if not ah or not ai then return end
+
+	local aj,ak = n(ag,ah,"Generator")
+	ak.TextColor3 = h.Generator
+
+	local al = Instance.new("Highlight")
+	al.Adornee = ag
+	al.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	al.FillColor = h.Generator
+	al.OutlineColor = h.Generator
+	al.FillTransparency = 0.9
+	al.Parent = ag
+
+	local am
+	am = ai.Changed:Connect(function(an)
+		if an >= 99 then
+			am:Disconnect()
+			aj:Destroy()
+			al:Destroy()
+			i[ag] = nil
+		end
+	end)
+end
+
+local function ao(ap)
+	if i[ap] then return end
+	i[ap] = true
+
+	local aq = ap:FindFirstChild("ItemRoot")
+	if not aq then return end
+
+	local ar,as = n(ap,aq,ap.Name)
+	as.TextColor3 = h.Item
+
+	local at = Instance.new("Highlight")
+	at.Adornee = ap
+	at.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	at.FillColor = h.Item
+	at.OutlineColor = h.Item
+	at.FillTransparency = 0.9
+	at.Parent = ap
+
+	local au = b.Heartbeat:Connect(function()
+		local av = l()
+		if av and (av.Position - aq.Position).Magnitude <= 20 then
+			at.FillColor = h.GREEN
+		else
+			at.FillColor = h.Item
+		end
+	end)
+
+	ap.Destroying:Once(function()
+		au:Disconnect()
+		ar:Destroy()
+		at:Destroy()
+		i[ap] = nil
+	end)
+end
+
+local function aw(ax,ay)
+	if i[ax] then return end
+	i[ax] = true
+
+	local az = ax:IsA("BasePart") and ax or ax:FindFirstChildWhichIsA("BasePart",true)
+	if not az then return end
+
+	local aA
+	if ay then
+		aA,_ = n(ax,az,"Mine")
+	end
+
+	local aB = Instance.new("Highlight")
+	aB.Adornee = ax
+	aB.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	aB.FillColor = h.GREEN
+	aB.OutlineColor = h.GREEN
+	aB.FillTransparency = 0.65
+	aB.Parent = ax
+
+	ax.Destroying:Once(function()
+		if aA then aA:Destroy() end
+		aB:Destroy()
+		i[ax] = nil
+	end)
+end
+
+local function aC(aD,aE)
+	if j[aD] then return end
+	j[aD] = true
+
+	local aF = aD:IsA("BasePart") and aD or aD:FindFirstChildWhichIsA("BasePart",true)
+	if not aF then return end
+
+	local aG,aH = n(aD,aF,aE)
+	local aI = (aD.Name=="PizzaDeliveryRig") and h.RED or h.CustomObj
+	aH.TextColor3 = aI
+
+	local aJ = Instance.new("Highlight")
+	aJ.Adornee = aD
+	aJ.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	aJ.FillColor = aI
+	aJ.OutlineColor = aI
+	aJ.FillTransparency = 0.7
+	aJ.OutlineTransparency = 0
+	aJ.Parent = aD
+
+	aD.Destroying:Once(function()
+		aG:Destroy()
+		aJ:Destroy()
+		j[aD] = nil
+	end)
+end
+
+for _,v in ipairs(f:GetDescendants()) do
+	if v:IsA("Model") and v:FindFirstChild("Humanoid") then
+		t(v,false)
+	end
+end
+f.DescendantAdded:Connect(function(v)
+	if v:IsA("Model") and v:FindFirstChild("Humanoid") then
+		t(v,false)
+	end
+end)
+
+for _,v in ipairs(g:GetDescendants()) do
+	if v:IsA("Model") and v:FindFirstChild("Humanoid") then
+		t(v,true)
+	end
+end
+g.DescendantAdded:Connect(function(v)
+	if v:IsA("Model") and v:FindFirstChild("Humanoid") then
+		t(v,true)
+	end
+end)
+
+local function aK(v)
+	if v:IsA("Model") and v.Name=="Generator" then
+		af(v)
+	elseif v:IsA("Tool") then
+		ao(v)
+	elseif v.Name=="SubspaceTripmine" then
+		aw(v,true)
+	elseif v.Name:find("TaphTripwire") then
+		aw(v,false)
+	end
+
+	if k[v.Name] then
+		aC(v,k[v.Name])
+	end
+end
+
+for _,v in ipairs(e:GetDescendants()) do
+	aK(v)
+end
+e.DescendantAdded:Connect(aK)
