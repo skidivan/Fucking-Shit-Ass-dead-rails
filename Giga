@@ -1,0 +1,54 @@
+--[[
+Mercury Mobile Patch (SAFE)
+Apply AFTER loading original Mercury.
+Does NOT modify src.lua.
+Fixes mobile input safely.
+
+Usage:
+local Library = loadstring(game:HttpGet(MERCURY_URL))()
+loadstring(game:HttpGet(PATCH_URL))(Library)
+]]
+
+local function apply(Library)
+	local UIS = game:GetService("UserInputService")
+
+	local function patchButton(btn)
+		if not btn:IsA("GuiButton") then return end
+
+		-- Prevent double connections
+		if btn:GetAttribute("__MobilePatched") then return end
+		btn:SetAttribute("__MobilePatched", true)
+
+		-- Forward Activated to existing MouseButton1Click logic
+		btn.Activated:Connect(function()
+			for _, conn in ipairs(getconnections(btn.MouseButton1Click)) do
+				pcall(conn.Function)
+			end
+		end)
+	end
+
+	local function patchGui(gui)
+		for _, v in ipairs(gui:GetDescendants()) do
+			patchButton(v)
+		end
+	end
+
+	-- Patch existing UIs
+	if Library and Library._guis then
+		for _, gui in pairs(Library._guis) do
+			patchGui(gui.core)
+		end
+	end
+
+	-- Patch future UIs
+	local oldCreate = Library.create
+	function Library:create(opts)
+		local gui = oldCreate(self, opts)
+		task.defer(function()
+			patchGui(gui.core)
+		end)
+		return gui
+	end
+end
+
+return apply
