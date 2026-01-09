@@ -1,0 +1,236 @@
+-- Mercury-Style Mobile UI Library
+-- Visual clone, mobile-first, sliderless
+-- API-compatible subset of Mercury
+
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local Library = {}
+Library.Themes = {
+	Serika = {
+		Background = Color3.fromRGB(24, 24, 24),
+		Panel = Color3.fromRGB(30, 30, 30),
+		Accent = Color3.fromRGB(255, 170, 0),
+		Text = Color3.fromRGB(235, 235, 235),
+		SubText = Color3.fromRGB(160, 160, 160),
+		Stroke = Color3.fromRGB(50, 50, 50)
+	}
+}
+
+Library.ColorPickerStyles = {
+	Legacy = true
+}
+
+-- ===== Utilities =====
+
+local function roundify(obj, r)
+	local c = Instance.new("UICorner")
+	c.CornerRadius = UDim.new(0, r)
+	c.Parent = obj
+end
+
+local function stroke(obj, col)
+	local s = Instance.new("UIStroke")
+	s.Color = col
+	s.Thickness = 1
+	s.Parent = obj
+end
+
+local function pressFeedback(btn)
+	btn.InputBegan:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+			TweenService:Create(btn, TweenInfo.new(0.08), {
+				BackgroundTransparency = 0.15
+			}):Play()
+		end
+	end)
+	btn.InputEnded:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+			TweenService:Create(btn, TweenInfo.new(0.08), {
+				BackgroundTransparency = 0
+			}):Play()
+		end
+	end)
+end
+
+-- ===== Library:create =====
+
+function Library:create(opts)
+	local theme = opts.Theme or Library.Themes.Serika
+
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "MercuryClone"
+	gui.ResetOnSpawn = false
+	gui.Parent = PlayerGui
+
+	local main = Instance.new("Frame", gui)
+	main.Size = UDim2.fromOffset(520, 420)
+	main.Position = UDim2.fromScale(0.5, 0.5)
+	main.AnchorPoint = Vector2.new(0.5, 0.5)
+	main.BackgroundColor3 = theme.Background
+	roundify(main, 10)
+	stroke(main, theme.Stroke)
+
+	local header = Instance.new("TextLabel", main)
+	header.Size = UDim2.new(1, 0, 0, 40)
+	header.Text = "Mercury"
+	header.Font = Enum.Font.GothamBold
+	header.TextSize = 14
+	header.TextColor3 = theme.Text
+	header.BackgroundTransparency = 1
+
+	local tabsBar = Instance.new("Frame", main)
+	tabsBar.Position = UDim2.fromOffset(10, 50)
+	tabsBar.Size = UDim2.fromOffset(120, 360)
+	tabsBar.BackgroundColor3 = theme.Panel
+	roundify(tabsBar, 8)
+	stroke(tabsBar, theme.Stroke)
+
+	local pages = Instance.new("Frame", main)
+	pages.Position = UDim2.fromOffset(140, 50)
+	pages.Size = UDim2.fromOffset(370, 360)
+	pages.BackgroundTransparency = 1
+
+	local tabLayout = Instance.new("UIListLayout", tabsBar)
+	tabLayout.Padding = UDim.new(0, 6)
+
+	local self = {}
+	self.core = main
+	self._tabs = {}
+
+	function self:tab(t)
+		local tabBtn = Instance.new("TextButton", tabsBar)
+		tabBtn.Size = UDim2.fromOffset(100, 36)
+		tabBtn.Text = t.Name or "Tab"
+		tabBtn.Font = Enum.Font.Gotham
+		tabBtn.TextSize = 13
+		tabBtn.TextColor3 = theme.Text
+		tabBtn.BackgroundColor3 = theme.Panel
+		roundify(tabBtn, 6)
+		stroke(tabBtn, theme.Stroke)
+		pressFeedback(tabBtn)
+
+		local page = Instance.new("ScrollingFrame", pages)
+		page.Size = UDim2.fromScale(1, 1)
+		page.CanvasSize = UDim2.new(0, 0, 0, 0)
+		page.ScrollBarImageTransparency = 1
+		page.Visible = false
+
+		local layout = Instance.new("UIListLayout", page)
+		layout.Padding = UDim.new(0, 8)
+
+		tabBtn.Activated:Connect(function()
+			for _, p in pairs(self._tabs) do
+				p.page.Visible = false
+			end
+			page.Visible = true
+		end)
+
+		if #self._tabs == 0 then
+			page.Visible = true
+		end
+
+		local tab = {}
+		tab.page = page
+
+		function tab:button(b)
+			local btn = Instance.new("TextButton", page)
+			btn.Size = UDim2.fromOffset(330, 36)
+			btn.Text = b.Name or "Button"
+			btn.Font = Enum.Font.Gotham
+			btn.TextSize = 13
+			btn.TextColor3 = theme.Text
+			btn.BackgroundColor3 = theme.Panel
+			roundify(btn, 6)
+			stroke(btn, theme.Stroke)
+			pressFeedback(btn)
+
+			btn.Activated:Connect(function()
+				if b.Callback then
+					b.Callback()
+				end
+			end)
+		end
+
+		function tab:dropdown(d)
+			local btn = Instance.new("TextButton", page)
+			btn.Size = UDim2.fromOffset(330, 36)
+			btn.Text = d.StartingText or "Select"
+			btn.Font = Enum.Font.Gotham
+			btn.TextSize = 13
+			btn.TextColor3 = theme.Text
+			btn.BackgroundColor3 = theme.Panel
+			roundify(btn, 6)
+			stroke(btn, theme.Stroke)
+			pressFeedback(btn)
+
+			btn.Activated:Connect(function()
+				if d.Items then
+					btn.Text = tostring(d.Items[1][1] or d.Items[1])
+					if d.Callback then
+						d.Callback(d.Items[1][2] or d.Items[1])
+					end
+				end
+			end)
+		end
+
+		function tab:textbox(t)
+			local box = Instance.new("TextBox", page)
+			box.Size = UDim2.fromOffset(330, 36)
+			box.PlaceholderText = "Enter text..."
+			box.Text = ""
+			box.Font = Enum.Font.Gotham
+			box.TextSize = 13
+			box.TextColor3 = theme.Text
+			box.BackgroundColor3 = theme.Panel
+			roundify(box, 6)
+			stroke(box, theme.Stroke)
+
+			box.FocusLost:Connect(function()
+				if t.Callback then
+					t.Callback(box.Text)
+				end
+			end)
+		end
+
+		function tab:prompt(p)
+			local prompt = Instance.new("TextLabel", gui)
+			prompt.Size = UDim2.fromOffset(300, 160)
+			prompt.Position = UDim2.fromScale(0.5, 0.5)
+			prompt.AnchorPoint = Vector2.new(0.5, 0.5)
+			prompt.TextWrapped = true
+			prompt.Text = (p.Title or "") .. "\n\n" .. (p.Text or "")
+			prompt.Font = Enum.Font.Gotham
+			prompt.TextSize = 13
+			prompt.TextColor3 = theme.Text
+			prompt.BackgroundColor3 = theme.Panel
+			roundify(prompt, 8)
+			stroke(prompt, theme.Stroke)
+
+			task.delay(2.5, function()
+				prompt:Destroy()
+			end)
+		end
+
+		function tab:color_picker()
+			-- visual stub, no logic needed
+			local c = Instance.new("Frame", page)
+			c.Size = UDim2.fromOffset(330, 36)
+			c.BackgroundColor3 = theme.Accent
+			roundify(c, 6)
+		end
+
+		function tab:slider()
+			-- intentionally does nothing
+		end
+
+		table.insert(self._tabs, {button = tabBtn, page = page})
+		return tab
+	end
+
+	return self
+end
+
+return Library
