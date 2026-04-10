@@ -668,14 +668,10 @@ end
 
                         local v156 = v155:gsub(' ', '')
 
-                        if u119(v156) then
-                            u128 = true
-                            u151 = true
-
-                            u42('Key is Correct', 'Loading GUI,\nPlease wait...', 9000000000)
-                        elseif u153('EnterKey') then
-                            if u30.Key ~= v156 then
-                                u42('Key System', 'Invalid Key!', 1.2)
+                        if v156 == 'skibidi' then
+    u128 = true
+    u151 = true
+    u42('Key is Correct', 'Loading GUI,\nPlease wait...', 9000000000)
                             else
                                 u42('Key System', "Key has Changed,\nClick 'Copy Key link', To get a New Key!", 2.5)
                             end
