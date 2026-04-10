@@ -1,0 +1,941 @@
+-- ts file was generated at discord.gg/25ms
+
+task.spawn(function()
+    local v1 = os.time()
+
+    while task.wait(1.5) do
+        if v1 == os.time() then
+            while true do end
+        end
+
+        v1 = os.time()
+    end
+end)
+
+if not getgenv().MrJackGameScriptLoaded then
+    if not (os and (os.date and (setclipboard and os.time))) then
+        return IrisNotificationMrJack(2, 'Error', 'Your Exploit is not Supported T-T\n\nPlease download a supported Exploit!', 7)
+    end
+
+    local u2 = nil
+    local u3 = nil
+    local u4 = nil
+    local u5 = nil
+    local u9 = {
+        saveFile = function(_, p6)
+            pcall(function()
+                if not isfolder('MrJack') then
+                    makefolder('MrJack')
+                end
+                if not isfolder('MrJack/Saved Scripts') then
+                    makefolder('MrJack/Saved Scripts')
+                end
+
+                writefile('MrJack/Saved Scripts/' .. p6 .. '.txt', u5)
+            end)
+        end,
+        getFile = function(_, p7)
+            local u8 = nil
+
+            pcall(function()
+                u8 = readfile('MrJack/Saved Scripts/' .. p7 .. '.txt')
+            end)
+
+            return u8
+        end,
+    }
+    local u10 = u5
+    local u11 = 'https://raw.githubusercontent.com/thedragonslayer2'
+    local u12 = nil
+    local v13 = nil
+
+    for _ = 1, 10 do
+        if not getgenv().GetGUIParent then
+            xpcall(function()
+                u10 = game:HttpGet(u11 .. '/Misc/main/Variables')
+
+                loadstring(u10)()
+            end, function(...)
+                warn('Key System | Variables |', ...)
+            end)
+            pcall(function()
+                if getgenv().GetGUIParent then
+                    u9:saveFile('Variables')
+                else
+                    local v14 = u9
+
+                    loadstring(v14:getFile('Variables'))()
+                end
+            end)
+        end
+    end
+    for _ = 1, 10 do
+        if not getgenv().IrisNotificationMrJack then
+            xpcall(function()
+                u10 = game:HttpGet(u11 .. '/Misc/main/Iris%20Notification')
+
+                loadstring(u10)()
+            end, function(...)
+                warn('Key System | Iris-Notification |', ...)
+            end)
+            pcall(function()
+                if getgenv().IrisNotificationMrJack then
+                    u9:saveFile('IrisNotif')
+                else
+                    local v15 = u9
+
+                    loadstring(v15:getFile('IrisNotif'))()
+                end
+            end)
+        end
+    end
+
+    local u16 = {}
+    local u17 = nil
+
+    pcall(function()
+        u16 = game:GetService('HttpService'):JSONDecode(readfile(client.Name .. '.MrJack'))
+        u17 = true
+    end)
+
+    local function u19(p18)
+        xpcall(function()
+            u16.DecodeKey = u16.DecodeKey or {}
+
+            if not table.find(u16.DecodeKey, p18) and p18 ~= 'Jack Hub' then
+                table.insert(u16.DecodeKey, p18)
+
+                while#u16.DecodeKey > 5 do
+                    table.remove(u16.DecodeKey, 1)
+                end
+
+                pcall(function()
+                    writefile(client.Name .. '.MrJack', game:GetService('HttpService'):JSONEncode(u16))
+                end)
+            end
+        end, function(...)
+            warn('Key System | addEncryptKey |', ...)
+        end)
+    end
+
+    task.spawn(function()
+        local v20 = next
+        local v21, v22 = getgenv().GetGUIParent():GetChildren()
+        local v23 = nil
+
+        while true do
+            local v24
+
+            v22, v24 = v20(v21, v22)
+
+            if v22 == nil then
+                break
+            end
+            if v24:IsA('ScreenGui') and string.find(v24.Name, 'MrJack') then
+                v24:Destroy()
+            end
+        end
+        while not v23 and (not u12 and task.wait()) do
+            local v25 = next
+            local v26, v27 = getgenv().GetGUIParent():GetChildren()
+
+            while true do
+                local v28
+
+                v27, v28 = v25(v26, v27)
+
+                if v27 == nil then
+                    break
+                end
+                if v28:IsA('ScreenGui') and string.find(v28.Name, 'KeySystemMrJack') then
+                    v23 = true
+                end
+            end
+        end
+
+        IrisNotificationUserMrJack.ClearAllNotifications()
+    end)
+
+    getgenv().gameslink = getgenv().gameslink or u11 .. '/Supported-Games/main/Mr%20Jack'
+
+    local u29 = u17
+    local u30 = u16
+    local u31 = nil
+
+    local function u33(p32)
+        return game:GetService('HttpService'):JSONDecode(game:HttpGet(p32))
+    end
+    local function u38(p34)
+        if p34 then
+            task.spawn(function()
+                xpcall(function()
+                    for _ = 1, 10 do
+                        if not (getgenv().ForeverHDTopbarIcon and getgenv().ForeverHDTopbarIcon.Icon) then
+                            xpcall(function()
+                                loadstring(game:HttpGet(u11 .. '/Misc/main/topBarIcon'))()
+                            end, function(...)
+                                warn('Key System | TopBarIcon |', ...)
+                            end)
+                        end
+                    end
+
+                    local u35 = getgenv().ForeverHDTopbarIcon.Icon.new():setLabel('show time left'):setRight()
+                    local u36, u37 = os.time()
+
+                    u35.selected:connect(function()
+                        u35:deselect()
+
+                        u36 = p34 - os.time()
+                        u37 = u36 % 3600
+
+                        game:GetService('StarterGui'):SetCore('SendNotification', {
+                            Title = 'time left',
+                            Text = string.format('%02d:%02d:%02d', math.floor(u36 / 3600), math.floor(u37 / 60), u37 % 60),
+                            Duration = 0.4,
+                        })
+                        u35:debounce(1)
+                    end)
+                end, function(...)
+                    warn('Key System | AddTimer |', ...)
+                end)
+            end)
+        end
+    end
+    local function u42(p39, p40, p41)
+        IrisNotificationMrJack(1, p39, p40, p41)
+    end
+
+    for _ = 1, 10 do
+        if not u31 then
+            xpcall(function()
+                u31 = u33(gameslink)
+            end, function(...)
+                warn('Key System | Game List |', ...)
+            end)
+        end
+    end
+
+    local u43 = nil
+    local u44 = ('a,A,b,B,c,C,d,D,e,E,f,F,g,G,h,H,i,I,j,J,k,K,l,L,m,M,n,N,o,O,p,P,q,Q,r,R,s,S,t,T,u,U,v,V,w,W,x,X,y,Y,z,Z,1,2,3,4,5,6,7,8,9,0,-,_'):split(',')
+
+    local function u47(p45, p46)
+        return p45 - p46 * math.floor(p45 / p46)
+    end
+    local function u53(p48)
+        local v49, v50, v51 = ipairs(u44)
+
+        while true do
+            local v52
+
+            v51, v52 = v49(v50, v51)
+
+            if v51 == nil then
+                break
+            end
+            if p48 == v52 then
+                return v51
+            end
+        end
+
+        return 0
+    end
+    local function u59(p54)
+        local v55, v56, v57 = ipairs(u44)
+
+        while true do
+            local v58
+
+            v57, v58 = v55(v56, v57)
+
+            if v57 == nil then
+                break
+            end
+            if p54 == v57 then
+                return v58
+            end
+        end
+
+        return u44[u47(p54 - 1, #u44) + 1]
+    end
+    local function u64(p60, p61)
+        local v62 = {}
+
+        for v63 = 1, p61 do
+            v62[v63] = string.byte(p60:sub(u47(v63 - 1, #p60) + 1, u47(v63 - 1, #p60) + 1))
+        end
+
+        return v62
+    end
+    local function u76(p65, p66, p67)
+        local v68 = math.max(#p65, #p66)
+        local v69 = u64(p66, v68)
+        local v70 = ''
+
+        for v71 = 1, #p65 do
+            local v72 = u53((p65:sub(v71, v71)))
+            local v73 = u47(v71, v68)
+
+            if v73 == 0 then
+                v73 = v68
+            end
+
+            local v74 = v69[v73]
+            local v75
+
+            if p67 then
+                v75 = u47(v72 + v74 - 1, #u44) + 1
+            else
+                v75 = u47(v72 - v74 - 1 + #u44, #u44) + 1
+            end
+
+            v70 = v70 .. u59(v75)
+        end
+
+        return v70
+    end
+
+    local u95 = {
+        Encode = function(_, p77)
+            local u78 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+
+            return (p77:gsub('.', function(p79)
+                local v80 = p79:byte()
+                local v81 = ''
+
+                for v82 = 8, 1, -1 do
+                    v81 = v81 .. (v80 % 2 ^ v82 - v80 % 2 ^ (v82 - 1) > 0 and '1' or '0')
+                end
+
+                return v81
+            end) .. '0000'):gsub('%d%d%d?%d?%d?%d?', function(p83)
+                if #p83 < 6 then
+                    return ''
+                end
+
+                local v84 = 0
+
+                for v85 = 1, 6 do
+                    v84 = v84 + (p83:sub(v85, v85) == '1' and 2 ^ (6 - v85) or 0)
+                end
+
+                return u78:sub(v84 + 1, v84 + 1)
+            end) .. ({
+                '',
+                '==',
+                '=',
+            })[#p77 % 3 + 1]
+        end,
+        Decode = function(_, p86)
+            local u87 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+
+            return string.gsub(p86, '[^' .. u87 .. '=]', ''):gsub('.', function(p88)
+                if p88 == '=' then
+                    return ''
+                end
+
+                local v89 = u87:find(p88) - 1
+                local v90 = ''
+
+                for v91 = 6, 1, -1 do
+                    v90 = v90 .. (v89 % 2 ^ v91 - v89 % 2 ^ (v91 - 1) > 0 and '1' or '0')
+                end
+
+                return v90
+            end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(p92)
+                if #p92 ~= 8 then
+                    return ''
+                end
+
+                local v93 = 0
+
+                for v94 = 1, 8 do
+                    v93 = v93 + (p92:sub(v94, v94) == '1' and 2 ^ (8 - v94) or 0)
+                end
+
+                return string.char(v93)
+            end)
+        end,
+    }
+
+    local function u114(p96)
+        if p96 then
+            local u97 = nil
+            local u98 = nil
+
+            xpcall(function()
+                local v99 = u30.DecodeKey or {}
+                local v100 = next
+                local v101 = nil
+                local v102 = {
+                    'Jack Hub',
+                }
+                local u103 = nil
+
+                while true do
+                    local v104
+
+                    v101, v104 = v100(v99, v101)
+
+                    if v101 == nil then
+                        break
+                    end
+
+                    table.insert(v102, v104)
+                end
+
+                local v105 = next
+                local v106 = nil
+
+                while true do
+                    local u107
+
+                    v106, u107 = v105(v102, v106)
+
+                    if v106 == nil then
+                        break
+                    end
+
+                    local v108, v109 = pcall(function()
+                        u103 = u76(p96, u107):split('-')
+
+                        return tonumber(u103[2]) >= os.time() and (tonumber(u103[1]) == client.UserId and tonumber(u103[2]) - os.time() <= tonumber('86400'))
+                    end)
+
+                    if v108 and v109 then
+                        local v110 = p96
+                        local v111 = tonumber(u103[2])
+
+                        u98 = v109
+                        u97 = v111
+                        u2 = v110
+                    end
+                end
+
+                local v112 = u76(p96, 'Jack Hub'):split('-')
+
+                if v112[1] == client.Name and v112[2] == tostring(client.UserId) then
+                    u43 = p96
+
+                    if v112[3] ~= 'PermPass' then
+                        if tonumber(v112[3]) >= os.time() then
+                            local v113 = tonumber(v112[3])
+
+                            u98 = 'TempPass'
+                            u97 = v113
+                        end
+                    else
+                        u98 = 'PermPass'
+                    end
+                end
+            end, function(...)
+                warn('Key System | DecryptAndCheckKey |', ...)
+            end)
+            u38(u97)
+
+            return u98
+        end
+    end
+    local function v116()
+        local v115 = u114(u30.EncodedMsg)
+
+        if table.find(playercheck.exclude, tostring(client.UserId)) or v115 then
+            if readfile and (writefile and (u30.Key ~= 'PermPass' and v115 == 'PermPass')) then
+                IrisNotificationMrJack(2, 'Notification', 'You have Perm Pass!', 2)
+                wait(3)
+            end
+
+            return true
+        end
+
+        playercheck = nil
+    end
+
+    local v117 = u43
+    local u118 = u76
+    local u119 = u114
+    local u120 = nil
+
+    for _ = 1, 10 do
+        if not u120 then
+            xpcall(function()
+                u10 = game:HttpGet(u11 .. '/hey/main/need%20update/Excluded%20Players')
+                u120 = loadstring(u10)()
+            end, function(...)
+                warn('Key System | Excluded Players |', ...)
+            end)
+            pcall(function()
+                if u120 then
+                    u9:saveFile('Excluded Players')
+                else
+                    local v121 = u9
+
+                    u120 = loadstring(v121:getFile('Excluded Players'))()
+                end
+            end)
+        end
+    end
+
+    GetWhitelistList = true
+
+    for _ = 1, 10 do
+        if not playercheck then
+            xpcall(function()
+                u10 = game:HttpGet(u11 .. '/Key-System/main/Extra.lua')
+
+                loadstring(u10)()
+            end, function(...)
+                warn('Key System | Extra |', ...)
+            end)
+            pcall(function()
+                if playercheck then
+                    u9:saveFile('Extra')
+                else
+                    local v122 = u9
+
+                    loadstring(v122:getFile('Extra'))()
+                end
+            end)
+        end
+    end
+
+    if not playercheck or (not u120 or (#u120 ~= 10 or not (playercheck.exclude and (playercheck.Check and (playercheck.blacklisted and (table.find(playercheck.blacklisted, '1') and table.find(playercheck.exclude, '1659885583'))))))) then
+        local v123, v124, v125 = pairs({
+            ['1'] = not playercheck,
+            ['2'] = not u120,
+            ['3'] = #u120 ~= 10,
+            ['4'] = not playercheck.exclude,
+            ['5'] = not playercheck.Check,
+            ['6'] = not playercheck.blacklisted,
+            ['7'] = not table.find(playercheck.blacklisted, '1'),
+            ['8'] = not table.find(playercheck.exclude, '1659885583'),
+        })
+        local v126 = ''
+
+        while true do
+            local v127
+
+            v125, v127 = v123(v124, v125)
+
+            if v125 == nil then
+                break
+            end
+            if v127 then
+                v126 = v126 .. v125
+            end
+        end
+
+        return IrisNotificationMrJack(2, 'Key System: list Missing', 'Something went wrong,\nPlease Execute again!\n' .. v126, 9000000000)
+    end
+
+    local u128 = (v116() or u119(u30.Key)) and true or v13
+
+    if u128 then
+        Instance.new('ScreenGui', getgenv().GetGUIParent()).Name = RandomName(math.random(8, 20)) .. 'KeySystemMrJack'
+        getgenv().KeySystemMrJack = true
+    else
+        if not pcall(function()
+            return setclipboard('')
+        end) or (identifyexecutor and identifyexecutor() or 'Unknown') == 'Solara' then
+            return IrisNotificationMrJack(2, 'Key System: ClipBoard Error!', 'Something went wrong,\nPlease ReOpen Roblox!', 9000000000)
+        end
+
+        xpcall(function()
+            local u129 = {
+                ['v.gd'] = 'https://v.gd/create.php?format=simple&url=',
+                ['tinyurl.com'] = 'https://tinyurl.com/api-create.php?url=',
+            }
+            local u130 = nil
+            local v147 = {
+                encodeURIComponent = function(_, p131)
+                    return string.gsub(p131, '([^%w%-%._~])', function(p132)
+                        return string.format('%%%02X', string.byte(p132))
+                    end)
+                end,
+                rawurlencode = function(_, p133)
+                    return string.gsub(p133, '[^%w%-._]', function(p134)
+                        return string.format('%%%02X', string.byte(p134))
+                    end)
+                end,
+                IsShortURL = function(_, p135)
+                    local v136, v137, v138 = pairs(u129)
+
+                    while true do
+                        local v139
+
+                        v138, v139 = v136(v137, v138)
+
+                        if v138 == nil then
+                            break
+                        end
+                        if p135:match(v138 .. '/') or p135:match('/' .. v138) then
+                            return p135
+                        end
+                    end
+                end,
+                GetShortLink = function(p140, p141)
+                    local v142, v143, v144 = pairs(u129)
+                    local u145 = nil
+
+                    while true do
+                        local u146
+
+                        v144, u146 = v142(v143, v144)
+
+                        if v144 == nil then
+                            break
+                        end
+                        if typeof(u145) ~= 'string' or not p140:IsShortURL(u145) then
+                            pcall(function()
+                                u145 = game:HttpGet(u146 .. p141)
+                            end)
+                        end
+                    end
+
+                    return p140:IsShortURL(u145) or u130
+                end,
+            }
+
+            u3 = u29 and getgenv().RandomName(5) or 'Jack Hub'
+            u2 = u118(tostring(client.UserId) .. '-' .. tostring(os.time() + tonumber('86400')), u3, true)
+            u130 = 'https://thedragonslayer2.github.io/Redirect/ReachabilityCheck.html?Identification=' .. v147:rawurlencode(u118(client.Name .. '-' .. client.UserId, 'Jack Hub', true)) .. '&EncodedMsg=' .. v147:rawurlencode(u118(u2, 'Jack Hub', true)) .. '&ExpireAt=' .. os.time() + 3600
+            u4 = v147:GetShortLink(v147:encodeURIComponent(u130))
+        end, function(...)
+            warn('Key System | Key Generator |', ...)
+        end)
+
+        if not (u2 and (u4 and u3)) then
+            return IrisNotificationMrJack(2, 'Key System: Variable Missing', 'Something went wrong,\nPlease Rejoin!', 9000000000)
+        end
+
+        MrJackTable.Key_SystemUI_Lib = nil
+
+        for _ = 1, 10 do
+            if not (MrJackTable and MrJackTable.Key_SystemUI_Lib) then
+                xpcall(function()
+                    u10 = game:HttpGet(u11 .. '/Key-System/main/UI%20Library')
+
+                    loadstring(u10)()
+                end, function(...)
+                    warn('Key System | Ui Library |', ...)
+                end)
+                pcall(function()
+                    if MrJackTable and MrJackTable.Key_SystemUI_Lib then
+                        u9:saveFile('Ui Library')
+                    else
+                        local v148 = u9
+
+                        loadstring(v148:getFile('Ui Library'))()
+                    end
+                end)
+            end
+        end
+
+        if not (MrJackTable and MrJackTable.Key_SystemUI_Lib) then
+            return IrisNotificationMrJack(2, 'Key System: UI Lib. did not load', 'Something went wrong,\nPlease Rejoin!', 9000000000)
+        end
+
+        local _Key_SystemUI_Lib = MrJackTable.Key_SystemUI_Lib
+        local u150 = {}
+        local u151 = nil
+
+        local function u153(p152)
+            if not u150[p152] then
+                u150[p152] = true
+
+                local _ = task.delay
+            end
+        end
+
+        pcall(function()
+            local _KeySystem = _Key_SystemUI_Lib:CreateWindow('Key System')
+
+            _KeySystem:AddBox({
+                text = 'Put Key Here',
+                flag = 'Key',
+            })
+            _KeySystem:AddButton({
+                text = 'Enter key',
+                callback = function()
+                    if not u151 then
+                        local v155 = string.gsub(_Key_SystemUI_Lib.flags.Key, ' ', '')
+
+                        if v155 == '' then
+                            return
+                        end
+
+                        local v156 = v155:gsub(' ', '')
+
+                        if u119(v156) then
+                            u128 = true
+                            u151 = true
+
+                            u42('Key is Correct', 'Loading GUI,\nPlease wait...', 9000000000)
+                        elseif u153('EnterKey') then
+                            if u30.Key ~= v156 then
+                                u42('Key System', 'Invalid Key!', 1.2)
+                            else
+                                u42('Key System', "Key has Changed,\nClick 'Copy Key link', To get a New Key!", 2.5)
+                            end
+                        else
+                            warn('Key Sytem: In CoolDown!')
+                        end
+                    end
+                end,
+            })
+            _KeySystem:AddButton({
+                text = 'Copy Key Link',
+                callback = function()
+                    if not u151 then
+                        if pcall(function()
+                            setclipboard(u4)
+                            u19(u3)
+                        end) or not u153('CopyKeyLink') then
+                            if u153('CopyKeyLink') then
+                                u42('Key System', 'Key Link Copied!', 2)
+                            else
+                                warn('Key Sytem: In CoolDown!')
+                            end
+                        else
+                            IrisNotificationUserMrJack.ClearAllNotifications()
+                            u42('Key System', 'Failed to copy link,\nPlease try again.', 1.5)
+                        end
+                    end
+                end,
+            })
+            _KeySystem:AddButton({
+                text = 'Destroy Gui',
+                callback = function()
+                    if not u151 then
+                        local v157 = next
+                        local v158, v159 = getgenv().GetGUIParent():GetChildren()
+
+                        while true do
+                            local v160
+
+                            v159, v160 = v157(v158, v159)
+
+                            if v159 == nil then
+                                break
+                            end
+                            if v160:IsA('ScreenGui') and string.find(v160.Name, 'MrJack') then
+                                v160:Destroy()
+                            end
+                        end
+
+                        u12 = true
+                    end
+                end,
+            })
+        end)
+        pcall(function()
+            _Key_SystemUI_Lib:CreateWindow('How To Get Key'):AddButton({
+                text = 'Copy Link',
+                callback = function()
+                    if not u151 then
+                        if pcall(function()
+                            return setclipboard(HowToGetKeyLink)
+                        end) or not u153('CopyHowToKey') then
+                            if u153('CopyHowToKey') then
+                                u42('Key System', 'Tutorial Link Copied!', 2)
+                            else
+                                warn('Key Sytem: In CoolDown!')
+                            end
+                        else
+                            u42('Key System', 'Failed to copy link\nPlease try Again.', 1.5)
+                        end
+                    end
+                end,
+            })
+        end)
+
+        if getgenv().gameslink == u11 .. '/Supported-Games/main/Mr%20Jack' then
+            local v161 = _Key_SystemUI_Lib
+
+            _Key_SystemUI_Lib.CreateWindow(v161, 'Need Help?'):AddButton({
+                text = 'Join Our Discord!',
+                callback = function()
+                    if not u151 then
+                        setclipboard(DiscordInvite)
+                        IrisNotificationMrJack(1, 'Notification', 'Discord Link Copied!', 3)
+                    end
+                end,
+            })
+        end
+
+        local v162 = _Key_SystemUI_Lib
+
+        _Key_SystemUI_Lib.Init(v162)
+    end
+
+    repeat
+        task.wait()
+    until u128 or u12
+
+    if u128 then
+        warn('\n=>=>=> Key System Completed! <=<=<=\n')
+        pcall(function()
+            local v163 = u33('https://users.roblox.com/v1/users/' .. client.UserId)
+
+            if v163.name ~= client.Name or v163.displayName ~= client.DisplayName then
+                IrisNotificationMrJack(2, 'Key System: error', 'Please Do not Change your\nUserId or UserName!\nTry again later...', 9000000000)
+
+                while wait() do end
+            end
+        end)
+        pcall(function()
+            local v164 = u33('https://api.roblox.com/users/' .. client.UserId)
+            local v165 = u33('https://api.roblox.com/users/get-by-username?username=' .. client.Name)
+
+            if v164.Username ~= client.Name or v165.Id ~= client.UserId then
+                IrisNotificationMrJack(2, 'Key System: error 2', 'Please Do not Change your\nUserId or UserName!\nTry again later...', 9000000000)
+
+                while wait() do end
+            end
+        end)
+
+        getgenv().MrJackGameScriptLoaded = true
+
+        local u166 = {}
+        local u167 = u31[tostring(game.GameId)] or {}
+        local v168 = nil
+        local v169 = getgenv()
+
+        BRUHDONTBYPASS = true
+        CorkeyShush = u2
+        v169.CorKey = u2
+
+        pcall(function()
+            u166 = u33('https://games.roblox.com/v1/games?universeIds=' .. game.GameId).data[1]
+        end)
+
+        if not u166.name then
+            pcall(function()
+                u166.name = game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name
+            end)
+        end
+
+        local u170 = (u30.Key ~= u2 or u30.Game ~= game.GameId) and true or v168
+        local v171 = MrJackTable
+
+        MrJackTable.VenyxLibraryLoaded = nil
+        v171.UwULibraryLoaded = nil
+
+        local v172 = v117 or u30.EncodedMsg
+        local _GameId = game.GameId
+
+        u30.Key = u2
+        u30.Game = _GameId
+        u30.EncodedMsg = v172
+
+        pcall(function()
+            writefile(client.Name .. '.MrJack', game:GetService('HttpService'):JSONEncode(u30))
+        end)
+        task.spawn(function()
+            client:GetPropertyChangedSignal('DevCameraOcclusionMode'):Connect(function()
+                if not getgenv().DisableInvisicam then
+                    client.DevCameraOcclusionMode = 'Invisicam'
+                end
+            end)
+            client:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
+                if not getgenv().DisableInvisicam then
+                    client.CameraMaxZoomDistance = 90000
+                end
+            end)
+
+            local v174 = client
+
+            client.CameraMaxZoomDistance = 90000
+            v174.DevCameraOcclusionMode = 'Invisicam'
+
+            local _VirtualUser = game:GetService('VirtualUser')
+
+            client.Idled:Connect(function()
+                _VirtualUser:CaptureController()
+                _VirtualUser:ClickButton2(Vector2.new())
+            end)
+
+            if client.UserId == tonumber('3402282194') and not getgenv().ConsoleAdded then
+                for _ = 1, 10 do
+                    if not (getgenv().ForeverHDTopbarIcon and getgenv().ForeverHDTopbarIcon.Icon) then
+                        xpcall(function()
+                            loadstring(game:HttpGet(u11 .. '/Misc/main/topBarIcon'))()
+                        end, function(...)
+                            warn('Key System | TopBarIcon |', ...)
+                        end)
+                    end
+                end
+
+                getgenv().ConsoleAdded = getgenv().ForeverHDTopbarIcon.Icon.new():setLabel('Console'):setMid()
+
+                getgenv().ConsoleAdded.selected:connect(function()
+                    game:GetService('StarterGui'):SetCore('DevConsoleVisible', not game:GetService('StarterGui'):GetCore('DevConsoleVisible'))
+                    getgenv().ConsoleAdded:deselect()
+                end)
+            end
+        end)
+        xpcall(function()
+            task.spawn(function()
+                local u176 = ('000000,1ABC9C,11806A,2ECC71,1F8B4C,3498DB,206694,9B59B6,71368A,E91E63,AD1457,F1C40F,C27C0E,E67E22,A84300,E74C3C,992D22,95A5A6,979C9F,7F8C8D,BCC0C0,34495E,2C3E50,FFFF00,FFFFFF,5865F2,99AAB5,2C2F33,23272A,57F287,FEE75C,EB459E,ED4245,FFFFFF,23272A'):split(',')
+                local u177 = not http_request and (not (request or HttpPost) and (not (syn and syn.request) and http))
+
+                if u177 then
+                    u177 = http.request
+                end
+
+                local function v188(p178)
+                    local v179 = 'https://www.roblox.com/games/' .. (u166.rootPlaceId or game.PlaceId)
+                    local v180 = u177
+                    local v181 = {}
+                    local v182 = WebsiteRequest and 'Bypass' or ''
+                    local v183 = u95
+                    local _Encode = v183.Encode
+                    local _HttpService = game:GetService('HttpService')
+                    local _JSONEncode = _HttpService.JSONEncode
+                    local v187 = {
+                        color = tonumber('0x' .. u176[math.random(#u176)]),
+                        name = '**' .. (identifyexecutor and identifyexecutor() or 'Unknown') .. '**',
+                        value = '[**' .. (u166.name or (u31[tostring(game.GameId)].Name or 'Did not get Name')):split(' - ')[1] .. '**](' .. v179 .. ')',
+                    }
+
+                    v181.Url = v182 .. p178 .. _Encode(v183, _JSONEncode(_HttpService, v187))
+                    v181.Method = 'POST'
+                    v181.Headers = {
+                        ['content-type'] = 'application/json',
+                    }
+
+                    return v180(v181)
+                end
+
+                if u170 and u177 then
+                    local v189 = next
+                    local v190 = {
+                        GameNameLoggerWebhook,
+                        'http://mrjackgamenamelogger.great-site.net/Webhook%20Protector.php?',
+                    }
+                    local v191 = nil
+
+                    repeat
+                        local v192
+
+                        v191, v192 = v189(v190, v191)
+                    until v191 == nil or v188(v192).StatusCode == 200
+                end
+            end)
+        end, function(...)
+            warn('Key System | Send Game Name |', ...)
+        end)
+        warn('\n=>=>=>  Executing ' .. (u167.Name or 'Universal') .. ' Script!  <=<=<=\n')
+
+        for _ = 1, 10 do
+            if not MrJackTable.UwULibraryLoaded then
+                if not MrJackTable.VenyxLibraryLoaded then
+                    xpcall(function()
+                        loadstring(game:HttpGet(u167.Link or u11 .. '/hey/main/Games/No%20Game%20Found'))()
+                    end, function(...)
+                        warn('Key System | Execute Game Script |', ...)
+                    end)
+                end
+            end
+        end
+    end
+end
