@@ -595,7 +595,7 @@ if not getgenv().MrJackGameScriptLoaded then
                 end,
             }
 
-            u3 = 'meow'
+            u3 = 'skibidi'
             u2 = u118(tostring(client.UserId) .. '-' .. tostring(os.time() + tonumber('86400')), u3, true)
             u130 = 'https://thedragonslayer2.github.io/Redirect/ReachabilityCheck.html?Identification=' .. v147:rawurlencode(u118(client.Name .. '-' .. client.UserId, 'Jack Hub', true)) .. '&EncodedMsg=' .. v147:rawurlencode(u118(u2, 'Jack Hub', true)) .. '&ExpireAt=' .. os.time() + 3600
             u4 = v147:GetShortLink(v147:encodeURIComponent(u130))
