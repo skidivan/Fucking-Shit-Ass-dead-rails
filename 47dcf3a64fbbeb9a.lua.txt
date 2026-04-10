@@ -672,12 +672,11 @@ end
     u128 = true
     u151 = true
     u42('Key is Correct', 'Loading GUI,\nPlease wait...', 9000000000)
-                            else
-                                u42('Key System', "Key has Changed,\nClick 'Copy Key link', To get a New Key!", 2.5)
-                            end
-                        else
-                            warn('Key Sytem: In CoolDown!')
-                        end
+elseif u153('EnterKey') then
+    u42('Key System', 'Invalid Key!', 1.2)
+else
+    warn('Key Sytem: In CoolDown!')
+end
                     end
                 end,
             })
