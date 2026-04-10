@@ -639,12 +639,15 @@ if not getgenv().MrJackGameScriptLoaded then
         local u151 = nil
 
         local function u153(p152)
-            if not u150[p152] then
-                u150[p152] = true
-
-                local _ = task.delay
-            end
-        end
+    if not u150[p152] then
+        u150[p152] = true
+        task.delay(1.5, function()
+            u150[p152] = nil
+        end)
+        return true
+    end
+    return false
+end
 
         pcall(function()
             local _KeySystem = _Key_SystemUI_Lib:CreateWindow('Key System')
